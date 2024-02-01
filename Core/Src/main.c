@@ -95,12 +95,27 @@ int main(void)
   /* USER CODE BEGIN 2 */
   // Start the PWM Signal on pin 0
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  // Duty Cycle width
+  int pulse = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  // Increment the pulse
+	  pulse += 1;
+	  // Check if pulse has reached maximum duty cycle
+	  if(pulse > 255){
+		  // Reset back to zero duty cycle
+		  pulse = 0;
+	  }
+	  // Set the new duty cycle using HAL
+//	  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulse);
+	  // Set the new duty cycle using Bare Metal register access
+	  TIM2->CCR1 = pulse;
+	  // Add a delay between updates
+	  HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
